@@ -1,5 +1,6 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
+import { currency } from '../../i18n';
 
 interface Expense {
   label: string;
@@ -25,15 +26,17 @@ function Expenses(props: ExpensesProps) {
 
   return (
     <section>
-      <h2>Expenses ({t('intlCurrency', { val: total, currency: 'EUR' })})</h2>
+      <h2>Expenses ({t('intlCurrency', { val: total, currency })})</h2>
       <ul>
         {fields.map((field, index) => (
           <li key={field.id}>
             <label htmlFor={field.id}>{field.label}</label>
             <input
               id={field.id}
+              min="0"
               type="number"
               {...register(`expenses.${index}.value`, {
+                min: 0,
                 valueAsNumber: true,
               })}
             />
@@ -43,7 +46,10 @@ function Expenses(props: ExpensesProps) {
           </li>
         ))}
       </ul>
-      <button type="button" onClick={() => append({ label: 'Expense', value: 0 })}>
+      <button
+        type="button"
+        onClick={() => append({ label: `Expense #${fields.length + 1}`, value: 0 })}
+      >
         Add
       </button>
     </section>

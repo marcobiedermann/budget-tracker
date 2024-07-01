@@ -5,10 +5,11 @@ import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 import { z } from 'zod';
 import { Expenses, Income } from './components';
+import { currency } from './i18n';
 
 const entrySchema = z.object({
   label: z.string(),
-  value: z.number(),
+  value: z.number().nonnegative(),
 });
 
 const formDataSchema = z.object({
@@ -63,7 +64,7 @@ function App() {
           </div>
         </form>
       </FormProvider>
-      <div>Budget: {t('intlCurrency', { val: totalIncome - totalExpenses, currency: 'EUR' })}</div>
+      <div>Budget: {t('intlCurrency', { val: totalIncome - totalExpenses, currency })}</div>
     </div>
   );
 }

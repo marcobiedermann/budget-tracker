@@ -1,4 +1,5 @@
 import { useFieldArray, useFormContext } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 interface Expense {
   label: string;
@@ -20,10 +21,11 @@ function Expenses(props: ExpensesProps) {
     control,
     name: 'expenses',
   });
+  const { t } = useTranslation();
 
   return (
     <section>
-      <h2>Expenses ({total})</h2>
+      <h2>Expenses ({t('intlCurrency', { val: total, currency: 'EUR' })})</h2>
       <ul>
         {fields.map((field, index) => (
           <li key={field.id}>

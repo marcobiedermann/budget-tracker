@@ -1,6 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { sumBy } from 'lodash-es';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
 import { z } from 'zod';
 import { Expenses, Income } from './components';
@@ -38,6 +39,7 @@ function App() {
     defaultValues: value,
     resolver: zodResolver(formDataSchema),
   });
+  const { t } = useTranslation();
   const { handleSubmit, watch } = methods;
 
   function onSubmit(data: FormData) {
@@ -61,7 +63,7 @@ function App() {
           </div>
         </form>
       </FormProvider>
-      <div>Budget: {totalIncome - totalExpenses}</div>
+      <div>Budget: {t('intlCurrency', { val: totalIncome - totalExpenses, currency: 'EUR' })}</div>
     </div>
   );
 }

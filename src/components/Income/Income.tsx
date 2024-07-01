@@ -9,7 +9,12 @@ interface FieldValues {
   income: Income[];
 }
 
-function Income() {
+interface IncomeProps {
+  total: number;
+}
+
+function Income(props: IncomeProps) {
+  const { total } = props;
   const { control, register } = useFormContext<FieldValues>();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -18,7 +23,7 @@ function Income() {
 
   return (
     <section>
-      <h2>Income</h2>
+      <h2>Income ({total})</h2>
       <ul>
         {fields.map((field, index) => (
           <li key={field.id}>

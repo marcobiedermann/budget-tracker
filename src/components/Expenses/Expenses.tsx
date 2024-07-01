@@ -9,7 +9,12 @@ interface FieldValues {
   expenses: Expense[];
 }
 
-function Expenses() {
+interface ExpensesProps {
+  total: number;
+}
+
+function Expenses(props: ExpensesProps) {
+  const { total } = props;
   const { control, register } = useFormContext<FieldValues>();
   const { fields, append, remove } = useFieldArray({
     control,
@@ -18,7 +23,7 @@ function Expenses() {
 
   return (
     <section>
-      <h2>Expenses</h2>
+      <h2>Expenses ({total})</h2>
       <ul>
         {fields.map((field, index) => (
           <li key={field.id}>

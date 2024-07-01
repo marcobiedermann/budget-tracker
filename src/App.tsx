@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { sumBy } from 'lodash-es';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useLocalStorage } from 'react-use';
 import { z } from 'zod';
@@ -37,24 +38,30 @@ function App() {
     defaultValues: value,
     resolver: zodResolver(formDataSchema),
   });
+  const { handleSubmit, watch } = methods;
 
   function onSubmit(data: FormData) {
     console.log({ data });
     setValue(data);
   }
 
+  const [totalIncome, totalExpenses] = watch(['income', 'expenses']).map((entries) =>
+    sumBy(entries, 'value'),
+  );
+
   return (
     <div>
       <h1>Budget Tracker</h1>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)}>
-          <Income />
-          <Expenses />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Income total={totalIncome} />
+          <Expenses total={totalExpenses} />
           <div>
             <button type="submit">Submit</button>
           </div>
         </form>
       </FormProvider>
+      <div>Budget: {totalIncome - totalExpenses}</div>
     </div>
   );
 }

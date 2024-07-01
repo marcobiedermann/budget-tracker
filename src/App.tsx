@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { sumBy } from 'lodash-es';
+import { useEffect } from 'react';
 import { FormProvider, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 import { useLocalStorage } from 'react-use';
@@ -48,6 +49,13 @@ function App() {
     setValue(data);
   }
 
+  useEffect(() => {
+    const subscription = watch(() => handleSubmit(onSubmit)());
+
+    return () => subscription.unsubscribe();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [handleSubmit, watch]);
+
   const [totalIncome, totalExpenses] = watch(['income', 'expenses']).map((entries) =>
     sumBy(entries, 'value'),
   );
@@ -56,7 +64,7 @@ function App() {
     <div>
       <h1>Budget Tracker</h1>
       <FormProvider {...methods}>
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form>
           <Income total={totalIncome} />
           <Expenses total={totalExpenses} />
           <div>

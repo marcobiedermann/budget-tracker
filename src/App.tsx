@@ -1,5 +1,6 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { FormProvider, useForm } from 'react-hook-form';
+import { useLocalStorage } from 'react-use';
 import { z } from 'zod';
 import { Expenses, Income } from './components';
 
@@ -31,13 +32,15 @@ const defaultValues = {
 } satisfies FormData;
 
 function App() {
+  const [value, setValue] = useLocalStorage('budget', defaultValues);
   const methods = useForm({
-    defaultValues,
+    defaultValues: value,
     resolver: zodResolver(formDataSchema),
   });
 
   function onSubmit(data: FormData) {
     console.log({ data });
+    setValue(data);
   }
 
   return (
